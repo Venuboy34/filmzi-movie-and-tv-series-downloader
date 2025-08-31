@@ -1,0 +1,718 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Watch - Filmzi</title>
+    <link rel="icon" href="https://ar-hosting.pages.dev/1756681512254.jpg" type="image/jpeg">
+    <link rel="stylesheet" href="https://cdn.plyr.io/3.7.8/plyr.css">
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        :root {
+            --accent-color: #E50914;
+            --background-dark: #0A0A0A;
+            --background-card: #141414;
+            --text-white: #FFFFFF;
+            --text-gray: #B3B3B3;
+        }
+        
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: 'Montserrat', sans-serif;
+            background-color: var(--background-dark);
+            color: var(--text-white);
+            line-height: 1.6;
+            display: flex;
+            flex-direction: column;
+            min-height: 100vh;
+        }
+        
+        a {
+            text-decoration: none;
+            color: var(--text-white);
+        }
+        
+        .container {
+            width: 100%;
+            max-width: 1400px;
+            margin: 0 auto;
+            padding: 0 20px;
+        }
+        
+        /* Header Styles */
+        header {
+            background-color: rgba(0, 0, 0, 0.9);
+            padding: 15px 0;
+            position: sticky;
+            top: 0;
+            z-index: 100;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.5);
+        }
+        
+        .header-content {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        
+        .logo {
+            display: flex;
+            align-items: center;
+        }
+        
+        .logo img {
+            height: 40px;
+            margin-right: 10px;
+        }
+        
+        .logo h1 {
+            font-size: 24px;
+            font-weight: 700;
+            color: var(--accent-color);
+        }
+        
+        nav ul {
+            display: flex;
+            list-style: none;
+        }
+        
+        nav ul li {
+            margin-left: 25px;
+        }
+        
+        nav ul li a {
+            font-weight: 500;
+            transition: color 0.3s;
+        }
+        
+        nav ul li a:hover {
+            color: var(--accent-color);
+        }
+        
+        .search-icon, .menu-toggle {
+            display: none;
+            font-size: 20px;
+            cursor: pointer;
+        }
+        
+        /* Main Content */
+        main {
+            flex: 1;
+            padding: 30px 0;
+        }
+        
+        /* Breadcrumb */
+        .breadcrumb {
+            padding: 15px 0;
+            color: var(--text-gray);
+            font-size: 0.9rem;
+            margin-bottom: 20px;
+        }
+        
+        .breadcrumb a {
+            color: var(--text-gray);
+        }
+        
+        .breadcrumb a:hover {
+            color: var(--accent-color);
+        }
+        
+        /* Player Section */
+        .player-section {
+            margin-bottom: 40px;
+        }
+        
+        .player-container {
+            position: relative;
+            padding-top: 56.25%; /* 16:9 Aspect Ratio */
+            border-radius: 8px;
+            overflow: hidden;
+            background-color: #000;
+            margin-bottom: 20px;
+        }
+        
+        #player {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+        }
+        
+        .video-info {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 20px;
+        }
+        
+        .video-title {
+            font-size: 1.8rem;
+            font-weight: 600;
+        }
+        
+        .download-btn {
+            padding: 10px 20px;
+            background-color: var(--accent-color);
+            color: var(--text-white);
+            border-radius: 4px;
+            font-weight: 600;
+            transition: background-color 0.3s;
+            display: inline-flex;
+            align-items: center;
+        }
+        
+        .download-btn i {
+            margin-right: 8px;
+        }
+        
+        .download-btn:hover {
+            background-color: #f40612;
+        }
+        
+        /* Quality Selector */
+        .quality-selector {
+            display: flex;
+            gap: 10px;
+            margin-bottom: 30px;
+            flex-wrap: wrap;
+        }
+        
+        .quality-btn {
+            padding: 8px 15px;
+            background-color: var(--background-card);
+            border-radius: 4px;
+            font-size: 0.9rem;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+        
+        .quality-btn.active {
+            background-color: var(--accent-color);
+        }
+        
+        .quality-btn:hover:not(.active) {
+            background-color: #222;
+        }
+        
+        /* Recommendations */
+        .recommendations {
+            margin-top: 50px;
+        }
+        
+        .section-title {
+            font-size: 1.8rem;
+            margin-bottom: 20px;
+            font-weight: 600;
+            padding-bottom: 10px;
+            border-bottom: 1px solid #333;
+        }
+        
+        .media-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+            gap: 20px;
+        }
+        
+        .media-card {
+            background-color: var(--background-card);
+            border-radius: 8px;
+            overflow: hidden;
+            transition: transform 0.3s;
+        }
+        
+        .media-card:hover {
+            transform: translateY(-5px);
+        }
+        
+        .media-thumb {
+            height: 300px;
+            overflow: hidden;
+        }
+        
+        .media-thumb img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            transition: transform 0.3s;
+        }
+        
+        .media-card:hover .media-thumb img {
+            transform: scale(1.05);
+        }
+        
+        .media-info {
+            padding: 15px;
+        }
+        
+        .media-title {
+            font-size: 1.1rem;
+            font-weight: 600;
+            margin-bottom: 8px;
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+        }
+        
+        .media-meta {
+            display: flex;
+            justify-content: space-between;
+            color: var(--text-gray);
+            font-size: 0.9rem;
+        }
+        
+        /* Loading Spinner */
+        .loader {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 50vh;
+        }
+        
+        .spinner {
+            width: 50px;
+            height: 50px;
+            border: 5px solid rgba(255, 255, 255, 0.3);
+            border-radius: 50%;
+            border-top-color: var(--accent-color);
+            animation: spin 1s ease-in-out infinite;
+        }
+        
+        @keyframes spin {
+            to { transform: rotate(360deg); }
+        }
+        
+        .hidden {
+            display: none;
+        }
+        
+        /* Error Message */
+        .error-message {
+            text-align: center;
+            padding: 40px 0;
+            color: var(--accent-color);
+        }
+        
+        /* Footer */
+        footer {
+            background-color: #000;
+            padding: 40px 0;
+            margin-top: 50px;
+        }
+        
+        .footer-content {
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: space-between;
+        }
+        
+        .footer-section {
+            flex: 1;
+            min-width: 200px;
+            margin-bottom: 20px;
+        }
+        
+        .footer-section h3 {
+            font-size: 1.2rem;
+            margin-bottom: 15px;
+            color: var(--accent-color);
+        }
+        
+        .footer-section ul {
+            list-style: none;
+        }
+        
+        .footer-section ul li {
+            margin-bottom: 10px;
+        }
+        
+        .footer-section ul li a {
+            color: var(--text-gray);
+            transition: color 0.3s;
+        }
+        
+        .footer-section ul li a:hover {
+            color: var(--text-white);
+        }
+        
+        .copyright {
+            text-align: center;
+            padding-top: 20px;
+            border-top: 1px solid #333;
+            margin-top: 20px;
+            color: var(--text-gray);
+        }
+        
+        /* Responsive Styles */
+        @media (max-width: 768px) {
+            nav ul {
+                display: none;
+                position: absolute;
+                top: 70px;
+                left: 0;
+                width: 100%;
+                background-color: rgba(0, 0, 0, 0.9);
+                flex-direction: column;
+                padding: 20px;
+            }
+            
+            nav ul.show {
+                display: flex;
+            }
+            
+            nav ul li {
+                margin: 10px 0;
+            }
+            
+            .menu-toggle {
+                display: block;
+            }
+            
+            .video-title {
+                font-size: 1.4rem;
+            }
+            
+            .video-info {
+                flex-direction: column;
+                align-items: flex-start;
+                gap: 15px;
+            }
+            
+            .media-grid {
+                grid-template-columns: repeat(auto-fill, minmax(150px, 1fr));
+            }
+            
+            .media-thumb {
+                height: 220px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Header -->
+    <header>
+        <div class="container header-content">
+            <div class="logo">
+                <img src="https://ar-hosting.pages.dev/1756681512254.jpg" alt="Filmzi Logo">
+                <h1>FILMZI</h1>
+            </div>
+            
+            <nav>
+                <ul id="nav-menu">
+                    <li><a href="home.html">Home</a></li>
+                    <li><a href="movie.html">Movies</a></li>
+                    <li><a href="tvseries.html">TV Series</a></li>
+                    <li><a href="language.html">Languages</a></li>
+                </ul>
+            </nav>
+            
+            <div class="search-icon">
+                <a href="search.html"><i class="fas fa-search"></i></a>
+            </div>
+            
+            <div class="menu-toggle" id="menu-toggle">
+                <i class="fas fa-bars"></i>
+            </div>
+        </div>
+    </header>
+
+    <!-- Main Content -->
+    <main class="container">
+        <!-- Breadcrumb -->
+        <div class="breadcrumb">
+            <a href="home.html">Home</a> > <span id="breadcrumb-title">Watch</span>
+        </div>
+        
+        <!-- Loading Spinner -->
+        <div class="loader" id="loader">
+            <div class="spinner"></div>
+        </div>
+        
+        <!-- Error Message -->
+        <div class="error-message hidden" id="error-message">
+            <h2>Unable to load video</h2>
+            <p>Please check your internet connection and try again.</p>
+        </div>
+        
+        <!-- Player Section -->
+        <div class="player-section hidden" id="player-section">
+            <div class="player-container">
+                <video id="player" playsinline controls>
+                    <source src="" type="video/mp4" id="video-source">
+                </video>
+            </div>
+            
+            <div class="video-info">
+                <h1 class="video-title" id="video-title">Loading title...</h1>
+                <a href="#" class="download-btn" id="download-link" target="_blank">
+                    <i class="fas fa-download"></i> Download
+                </a>
+            </div>
+            
+            <div class="quality-selector" id="quality-selector">
+                <!-- Quality buttons will be added dynamically -->
+            </div>
+        </div>
+        
+        <!-- Recommendations -->
+        <div class="recommendations">
+            <h2 class="section-title">You might also like</h2>
+            <div class="media-grid" id="recommendations-grid">
+                <!-- Recommendations will be loaded dynamically -->
+            </div>
+        </div>
+    </main>
+
+    <!-- Footer -->
+    <footer>
+        <div class="container footer-content">
+            <div class="footer-section">
+                <h3>Filmzi</h3>
+                <p>Your ultimate destination for movies and TV series. Download and stream your favorite content in high quality.</p>
+            </div>
+            
+            <div class="footer-section">
+                <h3>Quick Links</h3>
+                <ul>
+                    <li><a href="home.html">Home</a></li>
+                    <li><a href="movie.html">Movies</a></li>
+                    <li><a href="tvseries.html">TV Series</a></li>
+                    <li><a href="language.html">Languages</a></li>
+                </ul>
+            </div>
+            
+            <div class="footer-section">
+                <h3>Genres</h3>
+                <ul>
+                    <li><a href="#">Action</a></li>
+                    <li><a href="#">Comedy</a></li>
+                    <li><a href="#">Drama</a></li>
+                    <li><a href="#">Horror</a></li>
+                </ul>
+            </div>
+            
+            <div class="footer-section">
+                <h3>Support</h3>
+                <ul>
+                    <li><a href="#">Help Center</a></li>
+                    <li><a href="#">Contact Us</a></li>
+                    <li><a href="#">FAQ</a></li>
+                </ul>
+            </div>
+        </div>
+        
+        <div class="container copyright">
+            <p>&copy; 2025 Filmzi. All rights reserved.</p>
+        </div>
+    </footer>
+
+    <script src="https://cdn.plyr.io/3.7.8/plyr.polyfilled.js"></script>
+    <script>
+        // Toggle mobile menu
+        document.getElementById('menu-toggle').addEventListener('click', function() {
+            document.getElementById('nav-menu').classList.toggle('show');
+        });
+
+        // Get parameters from URL
+        const urlParams = new URLSearchParams(window.location.search);
+        const mediaId = urlParams.get('id');
+        const mediaType = urlParams.get('type') || 'movie';
+        const episode = urlParams.get('episode');
+        const season = urlParams.get('season');
+
+        // Initialize Plyr player
+        const player = new Plyr('#player', {
+            captions: { active: true, update: true },
+            settings: ['quality', 'speed', 'loop']
+        });
+
+        // Fetch media details and initialize player
+        async function initializePlayer() {
+            if (!mediaId) {
+                showError("No media ID provided in URL");
+                return;
+            }
+
+            try {
+                // Fetch media details
+                const response = await fetch(`https://databaseuiy.vercel.app/api/media/${mediaId}`);
+                const mediaData = await response.json();
+                
+                // Update page title
+                document.title = `Watch ${mediaData.title} - Filmzi`;
+                
+                // Update breadcrumb
+                document.getElementById('breadcrumb-title').textContent = mediaData.title;
+                
+                // Update video title
+                document.getElementById('video-title').textContent = mediaData.title;
+                
+                // Get the appropriate video source based on media type
+                let videoSource = '';
+                let downloadUrl = '';
+                
+                if (mediaType === 'tv' && season && episode) {
+                    // TV show with specific episode
+                    const seasonData = mediaData.seasons[`season_${season}`];
+                    if (seasonData) {
+                        const episodeData = seasonData.episodes.find(ep => ep.episode_number == episode);
+                        if (episodeData && episodeData.video_720p) {
+                            videoSource = episodeData.video_720p;
+                        }
+                        if (episodeData && episodeData.download_720p) {
+                            downloadUrl = episodeData.download_720p.url;
+                        }
+                    }
+                } else {
+                    // Movie or default TV show
+                    if (mediaData.video_links) {
+                        // Prefer 1080p, then 720p, then the first available
+                        videoSource = mediaData.video_links.video_1080p || 
+                                     mediaData.video_links.video_720p || 
+                                     Object.values(mediaData.video_links)[0];
+                    }
+                    
+                    if (mediaData.download_links) {
+                        downloadUrl = mediaData.download_links.download_1080p?.url || 
+                                     mediaData.download_links.download_720p?.url || 
+                                     Object.values(mediaData.download_links)[0]?.url;
+                    }
+                }
+                
+                if (!videoSource) {
+                    showError("No video source available for this media");
+                    return;
+                }
+                
+                // Set video source
+                document.getElementById('video-source').src = videoSource;
+                
+                // Update download link
+                if (downloadUrl) {
+                    document.getElementById('download-link').href = downloadUrl;
+                } else {
+                    document.getElementById('download-link').style.display = 'none';
+                }
+                
+                // Create quality selector if multiple qualities available
+                if (mediaData.video_links && Object.keys(mediaData.video_links).length > 1) {
+                    const qualitySelector = document.getElementById('quality-selector');
+                    
+                    Object.entries(mediaData.video_links).forEach(([quality, url]) => {
+                        if (url) { // Only add if URL exists
+                            const qualityBtn = document.createElement('div');
+                            qualityBtn.className = 'quality-btn';
+                            qualityBtn.textContent = quality.replace('video_', '').toUpperCase();
+                            qualityBtn.setAttribute('data-quality', quality);
+                            qualityBtn.setAttribute('data-url', url);
+                            
+                            // Mark current quality as active
+                            if (url === videoSource) {
+                                qualityBtn.classList.add('active');
+                            }
+                            
+                            qualityBtn.addEventListener('click', function() {
+                                // Update video source
+                                document.getElementById('video-source').src = url;
+                                
+                                // Load new source
+                                player.source = {
+                                    type: 'video',
+                                    sources: [{
+                                        src: url,
+                                        type: 'video/mp4'
+                                    }]
+                                };
+                                
+                                // Update active button
+                                document.querySelectorAll('.quality-btn').forEach(btn => {
+                                    btn.classList.remove('active');
+                                });
+                                this.classList.add('active');
+                            });
+                            
+                            qualitySelector.appendChild(qualityBtn);
+                        }
+                    });
+                } else {
+                    document.getElementById('quality-selector').style.display = 'none';
+                }
+                
+                // Load recommendations
+                loadRecommendations(mediaId, mediaType);
+                
+                // Show player and hide loader
+                document.getElementById('player-section').classList.remove('hidden');
+                document.getElementById('loader').classList.add('hidden');
+                
+            } catch (error) {
+                console.error('Error loading media:', error);
+                showError("Failed to load media. Please try again later.");
+            }
+        }
+        
+        // Load recommendations
+        async function loadRecommendations(currentId, type) {
+            try {
+                const response = await fetch('https://databaseuiy.vercel.app/api/media');
+                const allMedia = await response.json();
+                
+                // Filter out current media and get same type
+                const recommendations = allMedia
+                    .filter(media => media.id != currentId && media.type === type)
+                    .slice(0, 6); // Get first 6 recommendations
+                
+                const grid = document.getElementById('recommendations-grid');
+                
+                if (recommendations.length === 0) {
+                    grid.innerHTML = '<p>No recommendations available</p>';
+                    return;
+                }
+                
+                grid.innerHTML = '';
+                
+                recommendations.forEach(media => {
+                    const mediaCard = `
+                        <div class="media-card">
+                            <a href="details.html?id=${media.id}">
+                                <div class="media-thumb">
+                                    <img src="${media.thumbnail}" alt="${media.title}">
+                                </div>
+                                <div class="media-info">
+                                    <h3 class="media-title">${media.title}</h3>
+                                    <div class="media-meta">
+                                        <span>${media.rating}/10</span>
+                                        <span>${media.language}</span>
+                                    </div>
+                                </div>
+                            </a>
+                        </div>
+                    `;
+                    grid.innerHTML += mediaCard;
+                });
+                
+            } catch (error) {
+                console.error('Error loading recommendations:', error);
+                document.getElementById('recommendations-grid').innerHTML = 
+                    '<p>Unable to load recommendations</p>';
+            }
+        }
+        
+        // Show error message
+        function showError(message) {
+            document.getElementById('loader').classList.add('hidden');
+            document.getElementById('error-message').classList.remove('hidden');
+            document.getElementById('error-message').querySelector('p').textContent = message;
+        }
+        
+        // Initialize the player when page loads
+        document.addEventListener('DOMContentLoaded', initializePlayer);
+    </script>
+</body>
+</html>
