@@ -1,0 +1,13 @@
+{
+  "name": "filmzi-website",
+  "version": "1.0.0",
+  "description": "Filmzi - Movie and TV Series Downloader",
+  "main": "index.html",
+  "scripts": {
+    "build": "echo 'No build process needed for static HTML'",
+    "deploy": "echo 'Deploy to Cloudflare Pages'"
+  },
+  "keywords": ["movies", "tv-series", "streaming"],
+  "author": "Your Name",
+  "license": "MIT"
+}
