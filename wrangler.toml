@@ -1,0 +1,9 @@
+name = "filmzi-movie-and-tv-series-downloader"
+compatibility_date = "2024-06-01"
+pages_build_output_dir = "./public"
+
+[env.production]
+workers_dev = false
+
+[env.development]
+workers_dev = true
