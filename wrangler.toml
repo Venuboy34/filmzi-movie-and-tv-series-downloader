@@ -1,4 +1,4 @@
 name = "filmzi-movie-and-tv-series-downloader"
-main = "worker.js"
+main = "home.html"
 compatibility_date = "2024-06-01"
 workers_dev = true
