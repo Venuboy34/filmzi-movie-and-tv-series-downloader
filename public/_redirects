@@ -1,0 +1,9 @@
+/* /index.html 200
+/details.html /details.html 200
+/movie.html /movie.html 200  
+/tvseries.html /tvseries.html 200
+/watch.html /watch.html 200
+/language.html /language.html 200
+/search.html /search.html 200
+/details.html?id=* /details.html 200
+/watch.html?id=* /watch.html 200
