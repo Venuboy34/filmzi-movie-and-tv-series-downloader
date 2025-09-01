@@ -5,7 +5,6 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Movie Details - Filmzi</title>
     <link rel="icon" href="https://ar-hosting.pages.dev/1756681512254.jpg" type="image/jpeg">
-    <link rel="stylesheet" href="https://cdn.plyr.io/3.7.8/plyr.css">
     <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;600;700&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <style>
@@ -169,6 +168,7 @@
             display: flex;
             gap: 15px;
             margin-bottom: 30px;
+            flex-wrap: wrap;
         }
         
         .btn {
@@ -201,8 +201,8 @@
             color: var(--text-white);
         }
         
-        /* Cast Section */
-        .cast-section {
+        /* Download Section */
+        .download-section {
             margin-bottom: 40px;
         }
         
@@ -212,6 +212,51 @@
             font-weight: 600;
             padding-bottom: 10px;
             border-bottom: 1px solid #333;
+        }
+        
+        .download-options {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+            gap: 20px;
+        }
+        
+        .download-card {
+            background-color: var(--background-card);
+            border-radius: 8px;
+            padding: 20px;
+            display: flex;
+            flex-direction: column;
+        }
+        
+        .download-quality {
+            font-weight: 600;
+            margin-bottom: 10px;
+            font-size: 1.1rem;
+        }
+        
+        .download-info {
+            color: var(--text-gray);
+            font-size: 0.9rem;
+            margin-bottom: 15px;
+            flex-grow: 1;
+        }
+        
+        .download-btn {
+            text-align: center;
+            padding: 10px;
+            background-color: var(--accent-color);
+            border-radius: 4px;
+            font-weight: 600;
+            transition: background-color 0.3s;
+        }
+        
+        .download-btn:hover {
+            background-color: #f40612;
+        }
+        
+        /* Cast Section */
+        .cast-section {
+            margin-bottom: 40px;
         }
         
         .cast-grid {
@@ -257,95 +302,29 @@
             color: var(--text-gray);
         }
         
-        /* Video Player Section */
-        .video-section {
-            margin-bottom: 40px;
-        }
-        
-        .video-container {
-            position: relative;
-            padding-top: 56.25%; /* 16:9 Aspect Ratio */
-            border-radius: 8px;
-            overflow: hidden;
-            background-color: #000;
-        }
-        
-        #player {
-            position: absolute;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-        }
-        
-        /* Quality Selector */
-        .quality-selector {
+        /* Loading Spinner */
+        .loader {
             display: flex;
-            gap: 10px;
-            margin-top: 15px;
-            flex-wrap: wrap;
+            justify-content: center;
+            align-items: center;
+            height: 50vh;
         }
         
-        .quality-btn {
-            padding: 8px 15px;
-            background-color: var(--background-card);
-            border-radius: 4px;
-            font-size: 0.9rem;
-            cursor: pointer;
-            transition: all 0.3s;
+        .spinner {
+            width: 50px;
+            height: 50px;
+            border: 5px solid rgba(255, 255, 255, 0.3);
+            border-radius: 50%;
+            border-top-color: var(--accent-color);
+            animation: spin 1s ease-in-out infinite;
         }
         
-        .quality-btn.active {
-            background-color: var(--accent-color);
+        @keyframes spin {
+            to { transform: rotate(360deg); }
         }
         
-        .quality-btn:hover:not(.active) {
-            background-color: #222;
-        }
-        
-        /* Download Section */
-        .download-section {
-            margin-bottom: 40px;
-        }
-        
-        .download-options {
-            display: grid;
-            grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
-            gap: 20px;
-        }
-        
-        .download-card {
-            background-color: var(--background-card);
-            border-radius: 8px;
-            padding: 20px;
-            display: flex;
-            flex-direction: column;
-        }
-        
-        .download-quality {
-            font-weight: 600;
-            margin-bottom: 10px;
-            font-size: 1.1rem;
-        }
-        
-        .download-info {
-            color: var(--text-gray);
-            font-size: 0.9rem;
-            margin-bottom: 15px;
-            flex-grow: 1;
-        }
-        
-        .download-btn {
-            text-align: center;
-            padding: 10px;
-            background-color: var(--accent-color);
-            border-radius: 4px;
-            font-weight: 600;
-            transition: background-color 0.3s;
-        }
-        
-        .download-btn:hover {
-            background-color: #f40612;
+        .hidden {
+            display: none;
         }
         
         /* Footer */
@@ -446,31 +425,10 @@
             .cast-image {
                 height: 150px;
             }
-        }
-        
-        /* Loading Spinner */
-        .loader {
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            height: 50vh;
-        }
-        
-        .spinner {
-            width: 50px;
-            height: 50px;
-            border: 5px solid rgba(255, 255, 255, 0.3);
-            border-radius: 50%;
-            border-top-color: var(--accent-color);
-            animation: spin 1s ease-in-out infinite;
-        }
-        
-        @keyframes spin {
-            to { transform: rotate(360deg); }
-        }
-        
-        .hidden {
-            display: none;
+            
+            .download-options {
+                grid-template-columns: 1fr;
+            }
         }
     </style>
 </head>
@@ -485,15 +443,15 @@
             
             <nav>
                 <ul id="nav-menu">
-                    <li><a href="home.html">Home</a></li>
-                    <li><a href="movie.html">Movies</a></li>
-                    <li><a href="tvseries.html">TV Series</a></li>
-                    <li><a href="language.html">Languages</a></li>
+                    <li><a href="/">Home</a></li>
+                    <li><a href="/movie.html">Movies</a></li>
+                    <li><a href="/tvseries.html">TV Series</a></li>
+                    <li><a href="/language.html">Languages</a></li>
                 </ul>
             </nav>
             
             <div class="search-icon">
-                <a href="search.html"><i class="fas fa-search"></i></a>
+                <a href="/search.html"><i class="fas fa-search"></i></a>
             </div>
             
             <div class="menu-toggle" id="menu-toggle">
@@ -506,7 +464,7 @@
     <main class="container">
         <!-- Breadcrumb -->
         <div class="breadcrumb">
-            <a href="home.html">Home</a> > <a href="movie.html">Movies</a> > <span id="breadcrumb-title">Loading...</span>
+            <a href="/">Home</a> > <a href="/movie.html">Movies</a> > <span id="breadcrumb-title">Loading...</span>
         </div>
         
         <!-- Loading Spinner -->
@@ -531,10 +489,10 @@
             <div class="footer-section">
                 <h3>Quick Links</h3>
                 <ul>
-                    <li><a href="home.html">Home</a></li>
-                    <li><a href="movie.html">Movies</a></li>
-                    <li><a href="tvseries.html">TV Series</a></li>
-                    <li><a href="language.html">Languages</a></li>
+                    <li><a href="/">Home</a></li>
+                    <li><a href="/movie.html">Movies</a></li>
+                    <li><a href="/tvseries.html">TV Series</a></li>
+                    <li><a href="/language.html">Languages</a></li>
                 </ul>
             </div>
             
@@ -563,7 +521,6 @@
         </div>
     </footer>
 
-    <script src="https://cdn.plyr.io/3.7.8/plyr.polyfilled.js"></script>
     <script>
         // Toggle mobile menu
         document.getElementById('menu-toggle').addEventListener('click', function() {
@@ -612,34 +569,14 @@
                         <p class="media-description">${mediaData.description}</p>
                         
                         <div class="action-buttons">
-                            <a href="#" class="btn" id="play-btn">
-                                <i class="fas fa-play"></i> Play
+                            <a href="/watch.html?id=${mediaData.id}" class="btn">
+                                <i class="fas fa-play"></i> Watch Now
                             </a>
                             <a href="#download" class="btn btn-outline">
                                 <i class="fas fa-download"></i> Download
                             </a>
                         </div>
                 `;
-                
-                // Add video section if video links exist
-                if (mediaData.video_links && Object.keys(mediaData.video_links).length > 0) {
-                    mediaHtml += `
-                        <div class="video-section">
-                            <h2 class="section-title">Watch ${mediaData.title}</h2>
-                            <div class="video-container">
-                                <video id="player" playsinline controls>
-                                    <source src="" type="video/mp4" id="video-source">
-                                </video>
-                            </div>
-                            
-                            <div class="quality-selector" id="quality-selector">
-                                ${Object.entries(mediaData.video_links).map(([quality, url]) => 
-                                    `<div class="quality-btn" data-quality="${quality}" data-url="${url}">${quality.replace('video_', '').toUpperCase()}</div>`
-                                ).join('')}
-                            </div>
-                        </div>
-                    `;
-                }
                 
                 // Add download section if download links exist
                 if (mediaData.download_links && Object.keys(mediaData.download_links).length > 0) {
@@ -684,59 +621,6 @@
                 mediaHtml += `</div>`; // Close media-info div
                 
                 mediaDetails.innerHTML = mediaHtml;
-                
-                // Initialize video player if video exists
-                if (mediaData.video_links && Object.keys(mediaData.video_links).length > 0) {
-                    // Set default quality (prefer 1080p, then 720p, then the first available)
-                    let defaultQuality = 'video_1080p';
-                    if (!mediaData.video_links[defaultQuality]) {
-                        defaultQuality = 'video_720p';
-                        if (!mediaData.video_links[defaultQuality]) {
-                            defaultQuality = Object.keys(mediaData.video_links)[0];
-                        }
-                    }
-                    
-                    // Set default video source
-                    const videoSource = document.getElementById('video-source');
-                    videoSource.src = mediaData.video_links[defaultQuality];
-                    
-                    // Highlight default quality button
-                    document.querySelector(`.quality-btn[data-quality="${defaultQuality}"]`).classList.add('active');
-                    
-                    // Initialize Plyr player
-                    const player = new Plyr('#player');
-                    
-                    // Handle quality selection
-                    document.querySelectorAll('.quality-btn').forEach(btn => {
-                        btn.addEventListener('click', function() {
-                            const quality = this.getAttribute('data-quality');
-                            const url = this.getAttribute('data-url');
-                            
-                            // Update video source
-                            videoSource.src = url;
-                            
-                            // Load new source
-                            player.source = {
-                                type: 'video',
-                                sources: [{
-                                    src: url,
-                                    type: 'video/mp4'
-                                }]
-                            };
-                            
-                            // Update active button
-                            document.querySelectorAll('.quality-btn').forEach(b => b.classList.remove('active'));
-                            this.classList.add('active');
-                        });
-                    });
-                    
-                    // Handle play button click
-                    document.getElementById('play-btn').addEventListener('click', function(e) {
-                        e.preventDefault();
-                        player.play();
-                        document.querySelector('.video-section').scrollIntoView({ behavior: 'smooth' });
-                    });
-                }
                 
                 // Show content and hide loader
                 mediaDetails.classList.remove('hidden');
