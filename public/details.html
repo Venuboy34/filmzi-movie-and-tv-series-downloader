@@ -201,8 +201,8 @@
             color: var(--text-white);
         }
         
-        /* Download Section */
-        .download-section {
+        /* Seasons Section */
+        .seasons-section {
             margin-bottom: 40px;
         }
         
@@ -212,6 +212,98 @@
             font-weight: 600;
             padding-bottom: 10px;
             border-bottom: 1px solid #333;
+        }
+        
+        .season-selector {
+            display: flex;
+            gap: 10px;
+            margin-bottom: 20px;
+            flex-wrap: wrap;
+        }
+        
+        .season-btn {
+            padding: 10px 20px;
+            background-color: var(--background-card);
+            border: none;
+            border-radius: 4px;
+            color: var(--text-white);
+            cursor: pointer;
+            transition: background-color 0.3s;
+        }
+        
+        .season-btn.active {
+            background-color: var(--accent-color);
+        }
+        
+        .season-btn:hover:not(.active) {
+            background-color: #2a2a2a;
+        }
+        
+        .episodes-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+            gap: 20px;
+        }
+        
+        .episode-card {
+            background-color: var(--background-card);
+            border-radius: 8px;
+            padding: 20px;
+            transition: transform 0.3s;
+        }
+        
+        .episode-card:hover {
+            transform: translateY(-5px);
+        }
+        
+        .episode-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 15px;
+        }
+        
+        .episode-number {
+            font-size: 1.2rem;
+            font-weight: 600;
+        }
+        
+        .episode-title {
+            font-weight: 600;
+            margin-bottom: 10px;
+            font-size: 1.1rem;
+        }
+        
+        .episode-actions {
+            display: flex;
+            gap: 10px;
+            margin-top: 15px;
+        }
+        
+        .episode-btn {
+            padding: 8px 15px;
+            background-color: var(--accent-color);
+            border-radius: 4px;
+            font-weight: 500;
+            font-size: 0.9rem;
+            text-align: center;
+            flex: 1;
+        }
+        
+        .episode-btn.outline {
+            background-color: transparent;
+            border: 1px solid var(--text-gray);
+            color: var(--text-gray);
+        }
+        
+        .episode-btn.outline:hover {
+            border-color: var(--text-white);
+            color: var(--text-white);
+        }
+        
+        /* Download Section */
+        .download-section {
+            margin-bottom: 40px;
         }
         
         .download-options {
@@ -388,6 +480,10 @@
                 margin-bottom: 20px;
                 flex: 0 0 auto;
             }
+            
+            .episodes-grid {
+                grid-template-columns: 1fr;
+            }
         }
         
         @media (max-width: 768px) {
@@ -429,6 +525,10 @@
             .download-options {
                 grid-template-columns: 1fr;
             }
+            
+            .episode-actions {
+                flex-direction: column;
+            }
         }
     </style>
 </head>
@@ -464,7 +564,7 @@
     <main class="container">
         <!-- Breadcrumb -->
         <div class="breadcrumb">
-            <a href="/">Home</a> > <a href="/movie.html">Movies</a> > <span id="breadcrumb-title">Loading...</span>
+            <a href="/">Home</a> > <a href="/tvseries.html">TV Series</a> > <span id="breadcrumb-title">Loading...</span>
         </div>
         
         <!-- Loading Spinner -->
@@ -563,11 +663,28 @@
                             <span>⭐ ${mediaData.rating}/10</span>
                             <span>${mediaData.language}</span>
                             ${mediaData.release_date ? `<span>${new Date(mediaData.release_date).getFullYear()}</span>` : ''}
-                            ${mediaData.type === 'tv' ? `<span>${mediaData.total_seasons} Season(s)</span>` : '<span>Movie</span>'}
+                            ${mediaData.type === 'tv' ? `<span>${mediaData.total_seasons || 1} Season(s)</span>` : '<span>Movie</span>'}
                         </div>
                         
                         <p class="media-description">${mediaData.description}</p>
-                        
+                `;
+                
+                // Add action buttons
+                if (mediaData.type === 'tv') {
+                    // For TV series, show season selector
+                    mediaHtml += `
+                        <div class="action-buttons">
+                            <a href="#seasons" class="btn">
+                                <i class="fas fa-play"></i> Browse Seasons
+                            </a>
+                            <a href="#download" class="btn btn-outline">
+                                <i class="fas fa-download"></i> Download
+                            </a>
+                        </div>
+                    `;
+                } else {
+                    // For movies
+                    mediaHtml += `
                         <div class="action-buttons">
                             <a href="/watch.html?id=${mediaData.id}" class="btn">
                                 <i class="fas fa-play"></i> Watch Now
@@ -576,7 +693,29 @@
                                 <i class="fas fa-download"></i> Download
                             </a>
                         </div>
-                `;
+                    `;
+                }
+                
+                // Add seasons section for TV series
+                if (mediaData.type === 'tv' && mediaData.seasons) {
+                    const seasons = Object.keys(mediaData.seasons);
+                    
+                    mediaHtml += `
+                        <div class="seasons-section" id="seasons">
+                            <h2 class="section-title">Seasons & Episodes</h2>
+                            
+                            <div class="season-selector" id="season-selector">
+                                ${seasons.map(season => 
+                                    `<button class="season-btn" data-season="${season}">${season.replace('season_', 'Season ')}</button>`
+                                ).join('')}
+                            </div>
+                            
+                            <div class="episodes-container" id="episodes-container">
+                                <!-- Episodes will be loaded here -->
+                            </div>
+                        </div>
+                    `;
+                }
                 
                 // Add download section if download links exist
                 if (mediaData.download_links && Object.keys(mediaData.download_links).length > 0) {
@@ -622,6 +761,31 @@
                 
                 mediaDetails.innerHTML = mediaHtml;
                 
+                // Set up season selector for TV series
+                if (mediaData.type === 'tv' && mediaData.seasons) {
+                    const seasonButtons = document.querySelectorAll('.season-btn');
+                    const episodesContainer = document.getElementById('episodes-container');
+                    
+                    // Load first season by default
+                    if (seasonButtons.length > 0) {
+                        seasonButtons[0].classList.add('active');
+                        loadEpisodes(mediaData.seasons[Object.keys(mediaData.seasons)[0]], episodesContainer);
+                    }
+                    
+                    // Add click events to season buttons
+                    seasonButtons.forEach(button => {
+                        button.addEventListener('click', function() {
+                            // Update active button
+                            seasonButtons.forEach(btn => btn.classList.remove('active'));
+                            this.classList.add('active');
+                            
+                            // Load episodes for selected season
+                            const seasonKey = this.getAttribute('data-season');
+                            loadEpisodes(mediaData.seasons[seasonKey], episodesContainer);
+                        });
+                    });
+                }
+                
                 // Show content and hide loader
                 mediaDetails.classList.remove('hidden');
                 document.getElementById('loader').classList.add('hidden');
@@ -630,6 +794,42 @@
                 console.error('Error fetching media details:', error);
                 document.getElementById('loader').innerHTML = '<p>Error loading media details. Please try again later.</p>';
             }
+        }
+        
+        // Load episodes for a season
+        function loadEpisodes(seasonData, container) {
+            if (!seasonData || !seasonData.episodes) {
+                container.innerHTML = '<p>No episodes available for this season.</p>';
+                return;
+            }
+            
+            let episodesHtml = `<div class="episodes-grid">`;
+            
+            seasonData.episodes.forEach(episode => {
+                episodesHtml += `
+                    <div class="episode-card">
+                        <div class="episode-header">
+                            <div class="episode-number">Episode ${episode.episode_number}</div>
+                        </div>
+                        <div class="episode-title">${episode.episode_name || `Episode ${episode.episode_number}`}</div>
+                        <div class="episode-actions">
+                            ${episode.video_720p ? `
+                                <a href="/watch.html?id=${mediaId}&type=tv&season=${seasonData.season_number}&episode=${episode.episode_number}" class="episode-btn">
+                                    <i class="fas fa-play"></i> Watch
+                                </a>
+                            ` : ''}
+                            ${episode.download_720p ? `
+                                <a href="${episode.download_720p.url}" class="episode-btn outline" target="_blank">
+                                    <i class="fas fa-download"></i> Download
+                                </a>
+                            ` : ''}
+                        </div>
+                    </div>
+                `;
+            });
+            
+            episodesHtml += `</div>`;
+            container.innerHTML = episodesHtml;
         }
         
         // Call the function when page loads
