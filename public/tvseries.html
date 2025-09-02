@@ -91,7 +91,33 @@
             color: var(--accent-color);
         }
         
-        .search-icon, .menu-toggle {
+        .search-container {
+            display: flex;
+            align-items: center;
+            background: rgba(255, 255, 255, 0.1);
+            border-radius: 4px;
+            padding: 5px 10px;
+            margin: 0 20px;
+            width: 300px;
+        }
+        
+        .search-container input {
+            background: transparent;
+            border: none;
+            color: var(--text-white);
+            padding: 8px;
+            width: 100%;
+            outline: none;
+        }
+        
+        .search-container button {
+            background: transparent;
+            border: none;
+            color: var(--text-gray);
+            cursor: pointer;
+        }
+        
+        .menu-toggle {
             display: none;
             font-size: 20px;
             cursor: pointer;
@@ -105,81 +131,53 @@
         
         .page-title {
             font-size: 2.5rem;
-            font-weight: 700;
             margin-bottom: 10px;
+            font-weight: 700;
         }
         
         .page-subtitle {
             color: var(--text-gray);
-            font-size: 1.1rem;
-            max-width: 600px;
-            margin: 0 auto;
+            margin-bottom: 30px;
         }
         
-        /* Filters */
-        .filters {
+        /* Filter Section */
+        .filter-section {
+            margin-bottom: 30px;
             background-color: var(--background-card);
             padding: 20px;
             border-radius: 8px;
-            margin: 30px 0;
+        }
+        
+        .filter-title {
+            font-size: 1.2rem;
+            margin-bottom: 15px;
+            font-weight: 600;
+        }
+        
+        .filter-options {
             display: flex;
             flex-wrap: wrap;
             gap: 15px;
-            align-items: center;
         }
         
         .filter-group {
-            display: flex;
-            flex-direction: column;
+            flex: 1;
             min-width: 200px;
         }
         
-        .filter-label {
-            font-size: 0.9rem;
+        .filter-group label {
+            display: block;
             margin-bottom: 8px;
-            color: var(--text-gray);
+            font-weight: 500;
         }
         
-        .filter-select {
-            padding: 10px;
-            background-color: #2a2a2a;
-            border: 1px solid #444;
-            border-radius: 4px;
-            color: var(--text-white);
-            font-family: inherit;
-        }
-        
-        .filter-select:focus {
-            outline: none;
-            border-color: var(--accent-color);
-        }
-        
-        .search-box {
-            position: relative;
-            flex-grow: 1;
-        }
-        
-        .search-input {
+        .filter-group select {
             width: 100%;
-            padding: 10px 40px 10px 15px;
-            background-color: #2a2a2a;
-            border: 1px solid #444;
+            padding: 10px;
+            background-color: var(--background-dark);
+            border: 1px solid #333;
             border-radius: 4px;
             color: var(--text-white);
-            font-family: inherit;
-        }
-        
-        .search-input:focus {
-            outline: none;
-            border-color: var(--accent-color);
-        }
-        
-        .search-icon {
-            position: absolute;
-            right: 15px;
-            top: 50%;
-            transform: translateY(-50%);
-            color: var(--text-gray);
         }
         
         /* Media Grid */
@@ -187,7 +185,7 @@
             display: grid;
             grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
             gap: 25px;
-            margin-bottom: 50px;
+            margin-bottom: 40px;
         }
         
         .media-card {
@@ -195,6 +193,7 @@
             border-radius: 8px;
             overflow: hidden;
             transition: transform 0.3s;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
         }
         
         .media-card:hover {
@@ -211,22 +210,41 @@
             width: 100%;
             height: 100%;
             object-fit: cover;
-            transition: transform 0.3s;
+            transition: transform 0.5s ease;
         }
         
         .media-card:hover .media-thumb img {
-            transform: scale(1.05);
+            transform: scale(1.1);
         }
         
         .media-rating {
             position: absolute;
             top: 10px;
             right: 10px;
+            background-color: rgba(0, 0, 0, 0.7);
+            color: #ffc107;
+            padding: 5px 10px;
+            border-radius: 20px;
+            font-weight: 600;
+            font-size: 0.9rem;
+            display: flex;
+            align-items: center;
+        }
+        
+        .media-rating i {
+            margin-right: 5px;
+            color: #ffc107;
+        }
+        
+        .season-badge {
+            position: absolute;
+            top: 10px;
+            left: 10px;
             background-color: var(--accent-color);
-            color: white;
-            padding: 5px 8px;
-            border-radius: 4px;
-            font-size: 0.8rem;
+            color: var(--text-white);
+            padding: 4px 8px;
+            border-radius: 12px;
+            font-size: 0.7rem;
             font-weight: 600;
         }
         
@@ -250,19 +268,50 @@
             font-size: 0.9rem;
         }
         
-        .season-badge {
-            background-color: #2a2a2a;
+        .media-type {
+            text-transform: uppercase;
+            font-weight: 600;
+            color: var(--accent-color);
+        }
+        
+        .media-hover-info {
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            right: 0;
+            background: linear-gradient(transparent, rgba(0, 0, 0, 0.9));
+            padding: 20px 15px 15px;
+            opacity: 0;
+            transition: opacity 0.3s;
+            transform: translateY(10px);
+        }
+        
+        .media-card:hover .media-hover-info {
+            opacity: 1;
+            transform: translateY(0);
+        }
+        
+        .media-genres {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 5px;
+            margin-bottom: 10px;
+        }
+        
+        .genre-tag {
+            background-color: var(--accent-color);
             padding: 3px 8px;
-            border-radius: 4px;
-            font-size: 0.8rem;
+            border-radius: 12px;
+            font-size: 0.7rem;
+            font-weight: 500;
         }
         
         /* Pagination */
         .pagination {
             display: flex;
             justify-content: center;
+            margin: 30px 0;
             gap: 10px;
-            margin: 40px 0;
         }
         
         .pagination-btn {
@@ -311,9 +360,8 @@
         /* No Results */
         .no-results {
             text-align: center;
-            padding: 40px 0;
+            padding: 40px;
             color: var(--text-gray);
-            grid-column: 1 / -1;
         }
         
         /* Footer */
@@ -367,14 +415,13 @@
         }
         
         /* Responsive Styles */
-        @media (max-width: 968px) {
-            .filters {
-                flex-direction: column;
-                align-items: stretch;
+        @media (max-width: 992px) {
+            .search-container {
+                width: 200px;
             }
             
             .filter-group {
-                width: 100%;
+                min-width: 150px;
             }
         }
         
@@ -388,6 +435,7 @@
                 background-color: rgba(0, 0, 0, 0.9);
                 flex-direction: column;
                 padding: 20px;
+                z-index: 1000;
             }
             
             nav ul.show {
@@ -398,8 +446,23 @@
                 margin: 10px 0;
             }
             
+            .search-container {
+                order: 3;
+                width: 100%;
+                margin: 15px 0 0;
+                display: none;
+            }
+            
+            .search-container.show {
+                display: flex;
+            }
+            
             .menu-toggle {
                 display: block;
+            }
+            
+            .header-content {
+                flex-wrap: wrap;
             }
             
             .page-title {
@@ -408,10 +471,19 @@
             
             .media-grid {
                 grid-template-columns: repeat(auto-fill, minmax(150px, 1fr));
+                gap: 15px;
             }
             
             .media-thumb {
                 height: 220px;
+            }
+            
+            .filter-options {
+                flex-direction: column;
+            }
+            
+            .footer-content {
+                flex-direction: column;
             }
         }
     </style>
@@ -425,6 +497,11 @@
                 <h1>FILMZI</h1>
             </div>
             
+            <div class="search-container" id="search-container">
+                <input type="text" placeholder="Search TV series..." id="search-input">
+                <button type="submit"><i class="fas fa-search"></i></button>
+            </div>
+            
             <nav>
                 <ul id="nav-menu">
                     <li><a href="home.html">Home</a></li>
@@ -433,10 +510,6 @@
                     <li><a href="language.html">Languages</a></li>
                 </ul>
             </nav>
-            
-            <div class="search-icon">
-                <a href="search.html"><i class="fas fa-search"></i></a>
-            </div>
             
             <div class="menu-toggle" id="menu-toggle">
                 <i class="fas fa-bars"></i>
@@ -448,49 +521,45 @@
     <main class="container">
         <!-- Page Header -->
         <div class="page-header">
-            <h1 class="page-title">TV Series 2025</h1>
-            <p class="page-subtitle">Discover the latest and greatest TV series available for streaming and download</p>
+            <h1 class="page-title">TV Series</h1>
+            <p class="page-subtitle">Browse our collection of the latest TV shows and series</p>
         </div>
         
-        <!-- Filters -->
-        <div class="filters">
-            <div class="filter-group">
-                <label class="filter-label">Genre</label>
-                <select class="filter-select" id="genre-filter">
-                    <option value="all">All Genres</option>
-                    <option value="action">Action</option>
-                    <option value="comedy">Comedy</option>
-                    <option value="drama">Drama</option>
-                    <option value="horror">Horror</option>
-                    <option value="sci-fi">Sci-Fi</option>
-                    <option value="animation">Animation</option>
-                </select>
-            </div>
-            
-            <div class="filter-group">
-                <label class="filter-label">Year</label>
-                <select class="filter-select" id="year-filter">
-                    <option value="all">All Years</option>
-                    <option value="2025">2025</option>
-                    <option value="2024">2024</option>
-                    <option value="2023">2023</option>
-                    <option value="2022">2022</option>
-                </select>
-            </div>
-            
-            <div class="filter-group">
-                <label class="filter-label">Sort By</label>
-                <select class="filter-select" id="sort-filter">
-                    <option value="newest">Newest First</option>
-                    <option value="rating">Highest Rating</option>
-                    <option value="title">Title A-Z</option>
-                </select>
-            </div>
-            
-            <div class="search-box">
-                <input type="text" class="search-input" id="search-input" placeholder="Search TV series...">
-                <div class="search-icon">
-                    <i class="fas fa-search"></i>
+        <!-- Filter Section -->
+        <div class="filter-section">
+            <h3 class="filter-title">Filter TV Series</h3>
+            <div class="filter-options">
+                <div class="filter-group">
+                    <label for="genre-filter">Genre</label>
+                    <select id="genre-filter">
+                        <option value="all">All Genres</option>
+                        <option value="Animation">Animation</option>
+                        <option value="Comedy">Comedy</option>
+                        <option value="Drama">Drama</option>
+                        <option value="Action & Adventure">Action & Adventure</option>
+                        <option value="Sci-Fi & Fantasy">Sci-Fi & Fantasy</option>
+                        <option value="Crime">Crime</option>
+                        <option value="Mystery">Mystery</option>
+                    </select>
+                </div>
+                
+                <div class="filter-group">
+                    <label for="year-filter">Year</label>
+                    <select id="year-filter">
+                        <option value="all">All Years</option>
+                        <option value="2025">2025</option>
+                        <option value="2024">2024</option>
+                        <option value="2023">2023</option>
+                    </select>
+                </div>
+                
+                <div class="filter-group">
+                    <label for="sort-filter">Sort By</label>
+                    <select id="sort-filter">
+                        <option value="newest">Newest First</option>
+                        <option value="oldest">Oldest First</option>
+                        <option value="rating">Highest Rated</option>
+                    </select>
                 </div>
             </div>
         </div>
@@ -505,9 +574,16 @@
             <!-- TV Series will be loaded dynamically -->
         </div>
         
+        <!-- No Results Message -->
+        <div class="no-results hidden" id="no-results">
+            <i class="fas fa-tv" style="font-size: 3rem; margin-bottom: 20px;"></i>
+            <h3>No TV series found</h3>
+            <p>Try adjusting your filters or search query</p>
+        </div>
+        
         <!-- Pagination -->
-        <div class="pagination" id="pagination">
-            <!-- Pagination will be loaded dynamically -->
+        <div class="pagination hidden" id="pagination">
+            <!-- Pagination buttons will be added dynamically -->
         </div>
     </main>
 
@@ -535,7 +611,7 @@
                     <li><a href="#">Action</a></li>
                     <li><a href="#">Comedy</a></li>
                     <li><a href="#">Drama</a></li>
-                    <li><a href="#">Horror</a></li>
+                    <li><a href="#">Animation</a></li>
                 </ul>
             </div>
             
@@ -558,28 +634,40 @@
         // Toggle mobile menu
         document.getElementById('menu-toggle').addEventListener('click', function() {
             document.getElementById('nav-menu').classList.toggle('show');
+            document.getElementById('search-container').classList.toggle('show');
         });
+
+        // Search functionality
+        document.getElementById('search-input').addEventListener('keyup', function(e) {
+            if (e.key === 'Enter') {
+                const query = this.value.trim();
+                if (query) {
+                    filterTVSeries();
+                }
+            }
+        });
+
+        // Filter change events
+        document.getElementById('genre-filter').addEventListener('change', filterTVSeries);
+        document.getElementById('year-filter').addEventListener('change', filterTVSeries);
+        document.getElementById('sort-filter').addEventListener('change', filterTVSeries);
 
         // Global variables
         let allTVSeries = [];
         let currentPage = 1;
-        const tvSeriesPerPage = 12;
-        
+        const itemsPerPage = 20;
+
         // Fetch TV series from API
         async function fetchTVSeries() {
             try {
-                const response = await fetch('https://databaseuiy.vercel.app/api/media');
+                const response = await fetch('https://databaseuisk-three.vercel.app/api/media');
                 const mediaData = await response.json();
                 
                 // Filter only TV series
                 allTVSeries = mediaData.filter(item => item.type === 'tv');
                 
-                // Apply initial sorting (newest first)
-                sortTVSeries('newest');
-                
                 // Display TV series
-                displayTVSeries(currentPage);
-                setupPagination();
+                displayTVSeries(allTVSeries);
                 
                 // Hide loader and show content
                 document.getElementById('loader').classList.add('hidden');
@@ -587,172 +675,149 @@
                 
             } catch (error) {
                 console.error('Error fetching TV series:', error);
-                document.getElementById('loader').innerHTML = 
-                    '<p>Error loading TV series. Please try again later.</p>';
+                document.getElementById('loader').innerHTML = '<p>Error loading TV series. Please try again later.</p>';
             }
         }
-        
-        // Display TV series for a specific page
-        function displayTVSeries(page) {
-            const grid = document.getElementById('tvseries-grid');
-            grid.innerHTML = '';
+
+        // Filter TV series based on selected criteria
+        function filterTVSeries() {
+            const genreFilter = document.getElementById('genre-filter').value;
+            const yearFilter = document.getElementById('year-filter').value;
+            const sortFilter = document.getElementById('sort-filter').value;
+            const searchQuery = document.getElementById('search-input').value.toLowerCase();
             
-            const startIndex = (page - 1) * tvSeriesPerPage;
-            const endIndex = startIndex + tvSeriesPerPage;
-            const paginatedTVSeries = allTVSeries.slice(startIndex, endIndex);
+            let filteredTVSeries = [...allTVSeries];
             
-            if (paginatedTVSeries.length === 0) {
-                grid.innerHTML = '<div class="no-results"><h2>No TV series found</h2><p>Try adjusting your filters</p></div>';
+            // Apply genre filter
+            if (genreFilter !== 'all') {
+                filteredTVSeries = filteredTVSeries.filter(series => 
+                    series.genres && series.genres.includes(genreFilter)
+                );
+            }
+            
+            // Apply year filter
+            if (yearFilter !== 'all') {
+                filteredTVSeries = filteredTVSeries.filter(series => {
+                    if (series.release_date) {
+                        const releaseYear = new Date(series.release_date).getFullYear();
+                        return releaseYear.toString() === yearFilter;
+                    }
+                    return false;
+                });
+            }
+            
+            // Apply search filter
+            if (searchQuery) {
+                filteredTVSeries = filteredTVSeries.filter(series => 
+                    series.title.toLowerCase().includes(searchQuery)
+                );
+            }
+            
+            // Apply sorting
+            switch (sortFilter) {
+                case 'newest':
+                    filteredTVSeries.sort((a, b) => new Date(b.release_date) - new Date(a.release_date));
+                    break;
+                case 'oldest':
+                    filteredTVSeries.sort((a, b) => new Date(a.release_date) - new Date(b.release_date));
+                    break;
+                case 'rating':
+                    filteredTVSeries.sort((a, b) => parseFloat(b.rating) - parseFloat(a.rating));
+                    break;
+            }
+            
+            // Display filtered TV series
+            displayTVSeries(filteredTVSeries);
+        }
+
+        // Display TV series in grid
+        function displayTVSeries(series) {
+            const tvSeriesGrid = document.getElementById('tvseries-grid');
+            const noResults = document.getElementById('no-results');
+            const pagination = document.getElementById('pagination');
+            
+            // Show no results message if no TV series found
+            if (series.length === 0) {
+                tvSeriesGrid.classList.add('hidden');
+                noResults.classList.remove('hidden');
+                pagination.classList.add('hidden');
                 return;
             }
             
-            paginatedTVSeries.forEach(series => {
-                const seriesCard = `
+            // Hide no results message
+            noResults.classList.add('hidden');
+            
+            // Calculate pagination
+            const totalPages = Math.ceil(series.length / itemsPerPage);
+            const startIndex = (currentPage - 1) * itemsPerPage;
+            const paginatedSeries = series.slice(startIndex, startIndex + itemsPerPage);
+            
+            // Generate TV series HTML
+            let tvSeriesHtml = '';
+            
+            paginatedSeries.forEach(series => {
+                tvSeriesHtml += `
                     <div class="media-card">
                         <a href="details.html?id=${series.id}">
                             <div class="media-thumb">
-                                <img src="${series.thumbnail}" alt="${series.title}">
-                                <div class="media-rating">${series.rating}</div>
+                                <img src="${series.thumbnail}" alt="${series.title}" onerror="this.src='https://via.placeholder.com/200x300/333/fff?text=No+Image'">
+                                <div class="media-rating">
+                                    <i class="fas fa-star"></i> ${series.rating}
+                                </div>
+                                ${series.total_seasons ? `<div class="season-badge">${series.total_seasons} Season${series.total_seasons > 1 ? 's' : ''}</div>` : ''}
+                                <div class="media-hover-info">
+                                    <div class="media-genres">
+                                        ${series.genres && series.genres.map(genre => `<span class="genre-tag">${genre}</span>`).join('')}
+                                    </div>
+                                    <p>${series.description ? series.description.substring(0, 100) + '...' : 'No description available'}</p>
+                                </div>
                             </div>
                             <div class="media-info">
                                 <h3 class="media-title">${series.title}</h3>
                                 <div class="media-meta">
                                     <span>${series.language}</span>
-                                    <span class="season-badge">${series.total_seasons || 1} Season(s)</span>
+                                    <span>${series.release_date ? new Date(series.release_date).getFullYear() : 'N/A'}</span>
                                 </div>
                             </div>
                         </a>
                     </div>
                 `;
-                grid.innerHTML += seriesCard;
             });
-        }
-        
-        // Setup pagination
-        function setupPagination() {
-            const pagination = document.getElementById('pagination');
-            pagination.innerHTML = '';
             
-            const pageCount = Math.ceil(allTVSeries.length / tvSeriesPerPage);
+            tvSeriesGrid.innerHTML = tvSeriesHtml;
             
-            if (pageCount <= 1) return;
-            
-            // Previous button
-            if (currentPage > 1) {
-                const prevBtn = document.createElement('button');
-                prevBtn.className = 'pagination-btn';
-                prevBtn.innerHTML = '&laquo; Prev';
-                prevBtn.addEventListener('click', () => {
-                    currentPage--;
-                    displayTVSeries(currentPage);
-                    setupPagination();
-                    window.scrollTo(0, 0);
-                });
-                pagination.appendChild(prevBtn);
-            }
-            
-            // Page buttons
-            for (let i = 1; i <= pageCount; i++) {
-                const pageBtn = document.createElement('button');
-                pageBtn.className = 'pagination-btn';
-                if (i === currentPage) pageBtn.classList.add('active');
-                pageBtn.textContent = i;
-                pageBtn.addEventListener('click', () => {
-                    currentPage = i;
-                    displayTVSeries(currentPage);
-                    setupPagination();
-                    window.scrollTo(0, 0);
-                });
-                pagination.appendChild(pageBtn);
-            }
-            
-            // Next button
-            if (currentPage < pageCount) {
-                const nextBtn = document.createElement('button');
-                nextBtn.className = 'pagination-btn';
-                nextBtn.innerHTML = 'Next &raquo;';
-                nextBtn.addEventListener('click', () => {
-                    currentPage++;
-                    displayTVSeries(currentPage);
-                    setupPagination();
-                    window.scrollTo(0, 0);
-                });
-                pagination.appendChild(nextBtn);
+            // Generate pagination buttons if needed
+            if (totalPages > 1) {
+                let paginationHtml = '';
+                
+                if (currentPage > 1) {
+                    paginationHtml += `<button class="pagination-btn" onclick="changePage(${currentPage - 1})">Previous</button>`;
+                }
+                
+                for (let i = 1; i <= totalPages; i++) {
+                    paginationHtml += `<button class="pagination-btn ${i === currentPage ? 'active' : ''}" onclick="changePage(${i})">${i}</button>`;
+                }
+                
+                if (currentPage < totalPages) {
+                    paginationHtml += `<button class="pagination-btn" onclick="changePage(${currentPage + 1})">Next</button>`;
+                }
+                
+                pagination.innerHTML = paginationHtml;
+                pagination.classList.remove('hidden');
+            } else {
+                pagination.classList.add('hidden');
             }
         }
-        
-        // Sort TV series based on criteria
-        function sortTVSeries(criteria) {
-            switch(criteria) {
-                case 'newest':
-                    allTVSeries.sort((a, b) => {
-                        const dateA = a.release_date ? new Date(a.release_date) : new Date(0);
-                        const dateB = b.release_date ? new Date(b.release_date) : new Date(0);
-                        return dateB - dateA;
-                    });
-                    break;
-                case 'rating':
-                    allTVSeries.sort((a, b) => parseFloat(b.rating) - parseFloat(a.rating));
-                    break;
-                case 'title':
-                    allTVSeries.sort((a, b) => a.title.localeCompare(b.title));
-                    break;
-            }
+
+        // Change page function
+        function changePage(page) {
+            currentPage = page;
+            filterTVSeries();
+            window.scrollTo(0, 0);
         }
-        
-        // Filter TV series based on search and filters
-        function filterTVSeries() {
-            const searchTerm = document.getElementById('search-input').value.toLowerCase();
-            const genre = document.getElementById('genre-filter').value;
-            const year = document.getElementById('year-filter').value;
-            const sortBy = document.getElementById('sort-filter').value;
-            
-            // Reset to first page
-            currentPage = 1;
-            
-            // Apply filters
-            let filteredTVSeries = allTVSeries;
-            
-            if (searchTerm) {
-                filteredTVSeries = filteredTVSeries.filter(series => 
-                    series.title.toLowerCase().includes(searchTerm) ||
-                    (series.description && series.description.toLowerCase().includes(searchTerm))
-                );
-            }
-            
-            // Note: Genre filtering would require genre data in the API
-            // This is a placeholder for when that data is available
-            
-            if (year !== 'all') {
-                filteredTVSeries = filteredTVSeries.filter(series => {
-                    if (!series.release_date) return year === '2025'; // Default to 2025 if no date
-                    const seriesYear = new Date(series.release_date).getFullYear().toString();
-                    return seriesYear === year;
-                });
-            }
-            
-            // Apply sorting
-            sortTVSeries(sortBy);
-            
-            // Update TV series and pagination
-            allTVSeries = filteredTVSeries;
-            displayTVSeries(currentPage);
-            setupPagination();
-        }
-        
-        // Set up event listeners for filters
-        function setupEventListeners() {
-            document.getElementById('search-input').addEventListener('input', filterTVSeries);
-            document.getElementById('genre-filter').addEventListener('change', filterTVSeries);
-            document.getElementById('year-filter').addEventListener('change', filterTVSeries);
-            document.getElementById('sort-filter').addEventListener('change', filterTVSeries);
-        }
-        
-        // Initialize when page loads
-        document.addEventListener('DOMContentLoaded', function() {
-            fetchTVSeries();
-            setupEventListeners();
-        });
+
+        // Call the function when page loads
+        document.addEventListener('DOMContentLoaded', fetchTVSeries);
     </script>
 </body>
 </html>
