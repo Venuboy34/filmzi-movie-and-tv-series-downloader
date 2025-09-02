@@ -459,7 +459,7 @@
             
             <nav>
                 <ul id="nav-menu">
-                    <li><a href="home.html" class="active">Home</a></li>
+                    <li><a href="index.html" class="active">Home</a></li>
                     <li><a href="movie.html">Movies</a></li>
                     <li><a href="tvseries.html">TV Series</a></li>
                     <li><a href="language.html">Languages</a></li>
@@ -516,7 +516,7 @@
             <div class="footer-section">
                 <h3>Quick Links</h3>
                 <ul>
-                    <li><a href="home.html">Home</a></li>
+                    <li><a href="index.html">Home</a></li>
                     <li><a href="movie.html">Movies</a></li>
                     <li><a href="tvseries.html">TV Series</a></li>
                     <li><a href="language.html">Languages</a></li>
@@ -526,19 +526,19 @@
             <div class="footer-section">
                 <h3>Genres</h3>
                 <ul>
-                    <li><a href="#">Action</a></li>
-                    <li><a href="#">Comedy</a></li>
-                    <li><a href="#">Drama</a></li>
-                    <li><a href="#">Horror</a></li>
+                    <li><a href="movie.html?genre=action">Action</a></li>
+                    <li><a href="movie.html?genre=comedy">Comedy</a></li>
+                    <li><a href="movie.html?genre=drama">Drama</a></li>
+                    <li><a href="movie.html?genre=horror">Horror</a></li>
                 </ul>
             </div>
             
             <div class="footer-section">
                 <h3>Support</h3>
                 <ul>
-                    <li><a href="#">Help Center</a></li>
-                    <li><a href="#">Contact Us</a></li>
-                    <li><a href="#">FAQ</a></li>
+                    <li><a href="help.html">Help Center</a></li>
+                    <li><a href="contact.html">Contact Us</a></li>
+                    <li><a href="faq.html">FAQ</a></li>
                 </ul>
             </div>
         </div>
@@ -733,7 +733,7 @@
                                         <span>${tv.release_date ? new Date(tv.release_date).getFullYear() : 'N/A'}</span>
                                     </div>
                                     <div class="media-actions">
-                                        <a href="watch.html?id=${tv.id}" class="action-btn watch-btn">
+                                        <a href="details.html?id=${tv.id}" class="action-btn watch-btn">
                                             <i class="fas fa-play"></i> Watch
                                         </a>
                                         <a href="${tv.seasons ? tv.seasons.season_1.episodes[0].download_720p.url : '#'}" class="action-btn download-btn" target="_blank">
