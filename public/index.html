@@ -7,13 +7,18 @@
     <link rel="icon" href="https://ar-hosting.pages.dev/1756681512254.jpg" type="image/jpeg">
     <link rel="stylesheet" href="https://cdn.plyr.io/3.7.8/plyr.css">
     <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <style>
         :root {
             --accent-color: #E50914;
+            --accent-hover: #f40612;
             --background-dark: #0A0A0A;
             --background-card: #141414;
+            --background-card-hover: #1f1f1f;
             --text-white: #FFFFFF;
             --text-gray: #B3B3B3;
+            --card-shadow: 0 10px 20px rgba(0, 0, 0, 0.3);
+            --transition: all 0.3s ease;
         }
         
         * {
@@ -32,6 +37,7 @@
         a {
             text-decoration: none;
             color: var(--text-white);
+            transition: var(--transition);
         }
         
         .container {
@@ -47,7 +53,7 @@
             padding: 15px 0;
             position: sticky;
             top: 0;
-            z-index: 100;
+            z-index: 1000;
             box-shadow: 0 2px 10px rgba(0, 0, 0, 0.5);
         }
         
@@ -84,14 +90,39 @@
         
         nav ul li a {
             font-weight: 500;
-            transition: color 0.3s;
         }
         
         nav ul li a:hover {
             color: var(--accent-color);
         }
         
-        .search-icon, .menu-toggle {
+        .search-container {
+            display: flex;
+            align-items: center;
+            background: rgba(255, 255, 255, 0.1);
+            border-radius: 4px;
+            padding: 5px 10px;
+            margin: 0 20px;
+            width: 300px;
+        }
+        
+        .search-container input {
+            background: transparent;
+            border: none;
+            color: var(--text-white);
+            padding: 8px;
+            width: 100%;
+            outline: none;
+        }
+        
+        .search-container button {
+            background: transparent;
+            border: none;
+            color: var(--text-gray);
+            cursor: pointer;
+        }
+        
+        .menu-toggle {
             display: none;
             font-size: 20px;
             cursor: pointer;
@@ -100,29 +131,43 @@
         /* Hero Section */
         .hero {
             height: 80vh;
-            background: linear-gradient(rgba(0, 0, 0, 0.7), rgba(0, 0, 0, 0.7)), 
-                        url('https://image.tmdb.org/t/p/original/wRpCqsJFyKNuh5FMegNPrhzp2NF.jpg');
             background-size: cover;
             background-position: center;
             display: flex;
             align-items: center;
             margin-bottom: 40px;
+            position: relative;
+            transition: background-image 1s ease-in-out;
+        }
+        
+        .hero::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(to right, rgba(0, 0, 0, 0.8), rgba(0, 0, 0, 0.4));
         }
         
         .hero-content {
             max-width: 600px;
             padding: 0 20px;
+            position: relative;
+            z-index: 1;
         }
         
         .hero-content h2 {
             font-size: 3rem;
             margin-bottom: 20px;
+            text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.5);
         }
         
         .hero-content p {
             font-size: 1.2rem;
             margin-bottom: 25px;
             color: var(--text-gray);
+            text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.5);
         }
         
         .btn {
@@ -132,11 +177,37 @@
             color: var(--text-white);
             border-radius: 4px;
             font-weight: 600;
-            transition: background-color 0.3s;
+            transition: var(--transition);
         }
         
         .btn:hover {
-            background-color: #f40612;
+            background-color: var(--accent-hover);
+            transform: translateY(-2px);
+        }
+        
+        .hero-indicators {
+            position: absolute;
+            bottom: 20px;
+            left: 0;
+            right: 0;
+            display: flex;
+            justify-content: center;
+            gap: 10px;
+            z-index: 1;
+        }
+        
+        .indicator {
+            width: 12px;
+            height: 12px;
+            border-radius: 50%;
+            background-color: rgba(255, 255, 255, 0.5);
+            cursor: pointer;
+            transition: var(--transition);
+        }
+        
+        .indicator.active {
+            background-color: var(--accent-color);
+            transform: scale(1.2);
         }
         
         /* Section Styles */
@@ -161,38 +232,65 @@
             font-weight: 500;
         }
         
+        .view-all:hover {
+            text-decoration: underline;
+        }
+        
         /* Media Grid */
         .media-grid {
             display: grid;
             grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
-            gap: 20px;
+            gap: 25px;
         }
         
         .media-card {
             background-color: var(--background-card);
             border-radius: 8px;
             overflow: hidden;
-            transition: transform 0.3s;
+            transition: var(--transition);
+            box-shadow: var(--card-shadow);
+            position: relative;
         }
         
         .media-card:hover {
-            transform: translateY(-5px);
+            transform: translateY(-10px);
+            background-color: var(--background-card-hover);
         }
         
         .media-thumb {
             height: 300px;
             overflow: hidden;
+            position: relative;
         }
         
         .media-thumb img {
             width: 100%;
             height: 100%;
             object-fit: cover;
-            transition: transform 0.3s;
+            transition: transform 0.5s ease;
         }
         
         .media-card:hover .media-thumb img {
-            transform: scale(1.05);
+            transform: scale(1.1);
+        }
+        
+        .media-rating {
+            position: absolute;
+            top: 10px;
+            right: 10px;
+            background-color: rgba(0, 0, 0, 0.7);
+            color: #ffc107;
+            padding: 5px 10px;
+            border-radius: 20px;
+            font-weight: 600;
+            font-size: 0.9rem;
+            display: flex;
+            align-items: center;
+        }
+        
+        .media-rating i {
+            margin-right: 5px;
+            color: #ffc107;
         }
         
         .media-info {
@@ -213,6 +311,44 @@
             justify-content: space-between;
             color: var(--text-gray);
             font-size: 0.9rem;
+        }
+        
+        .media-type {
+            text-transform: uppercase;
+            font-weight: 600;
+            color: var(--accent-color);
+        }
+        
+        .media-hover-info {
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            right: 0;
+            background: linear-gradient(transparent, rgba(0, 0, 0, 0.9));
+            padding: 20px 15px 15px;
+            opacity: 0;
+            transition: var(--transition);
+            transform: translateY(10px);
+        }
+        
+        .media-card:hover .media-hover-info {
+            opacity: 1;
+            transform: translateY(0);
+        }
+        
+        .media-genres {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 5px;
+            margin-bottom: 10px;
+        }
+        
+        .genre-tag {
+            background-color: var(--accent-color);
+            padding: 3px 8px;
+            border-radius: 12px;
+            font-size: 0.7rem;
+            font-weight: 500;
         }
         
         /* Footer */
@@ -250,7 +386,6 @@
         
         .footer-section ul li a {
             color: var(--text-gray);
-            transition: color 0.3s;
         }
         
         .footer-section ul li a:hover {
@@ -266,6 +401,16 @@
         }
         
         /* Responsive Styles */
+        @media (max-width: 992px) {
+            .search-container {
+                width: 200px;
+            }
+            
+            .hero-content h2 {
+                font-size: 2.5rem;
+            }
+        }
+        
         @media (max-width: 768px) {
             nav ul {
                 display: none;
@@ -276,6 +421,7 @@
                 background-color: rgba(0, 0, 0, 0.9);
                 flex-direction: column;
                 padding: 20px;
+                z-index: 1000;
             }
             
             nav ul.show {
@@ -286,20 +432,40 @@
                 margin: 10px 0;
             }
             
+            .search-container {
+                order: 3;
+                width: 100%;
+                margin: 15px 0 0;
+                display: none;
+            }
+            
+            .search-container.show {
+                display: flex;
+            }
+            
             .menu-toggle {
                 display: block;
             }
             
+            .header-content {
+                flex-wrap: wrap;
+            }
+            
             .hero-content h2 {
-                font-size: 2.2rem;
+                font-size: 2rem;
             }
             
             .media-grid {
                 grid-template-columns: repeat(auto-fill, minmax(150px, 1fr));
+                gap: 15px;
             }
             
             .media-thumb {
                 height: 220px;
+            }
+            
+            .footer-content {
+                flex-direction: column;
             }
         }
     </style>
@@ -313,6 +479,11 @@
                 <h1>FILMZI</h1>
             </div>
             
+            <div class="search-container" id="search-container">
+                <input type="text" placeholder="Search movies and TV series..." id="search-input">
+                <button type="submit"><i class="fas fa-search"></i></button>
+            </div>
+            
             <nav>
                 <ul id="nav-menu">
                     <li><a href="home.html" class="active">Home</a></li>
@@ -322,10 +493,6 @@
                 </ul>
             </nav>
             
-            <div class="search-icon">
-                <a href="search.html"><i class="fas fa-search"></i></a>
-            </div>
-            
             <div class="menu-toggle" id="menu-toggle">
                 <i class="fas fa-bars"></i>
             </div>
@@ -333,11 +500,14 @@
     </header>
 
     <!-- Hero Section -->
-    <section class="hero">
+    <section class="hero" id="hero-section">
         <div class="container hero-content">
-            <h2>SAKAMOTO DAYS</h2>
-            <p>Once the greatest hitman of all, Taro Sakamoto retired in the name of love. But when his past catches up, he must fight to protect his beloved family.</p>
-            <a href="details.html?id=2" class="btn">Watch Now</a>
+            <h2 id="hero-title">SAKAMOTO DAYS</h2>
+            <p id="hero-description">Once the greatest hitman of all, Taro Sakamoto retired in the name of love. But when his past catches up, he must fight to protect his beloved family.</p>
+            <a href="details.html?id=2" class="btn" id="hero-button">Watch Now</a>
+        </div>
+        <div class="hero-indicators" id="hero-indicators">
+            <!-- Indicators will be added dynamically -->
         </div>
     </section>
 
@@ -408,22 +578,134 @@
         </div>
     </footer>
 
-    <script src="https://kit.fontawesome.com/a076d05399.js" crossorigin="anonymous"></script>
     <script>
         // Toggle mobile menu
         document.getElementById('menu-toggle').addEventListener('click', function() {
             document.getElementById('nav-menu').classList.toggle('show');
+            document.getElementById('search-container').classList.toggle('show');
         });
 
+        // Sample data for demonstration (in a real scenario, this would come from your API)
+        const sampleMediaData = [
+            {
+                "id": 1,
+                "title": "Abandoned Man",
+                "type": "movie",
+                "thumbnail": "https://image.tmdb.org/t/p/original/9jrhldzLHXia0uieyqK8UJ8PNAG.jpg",
+                "description": "After serving time in prison for his brother's crime, a man warily reunites with family, finding hope and healing in a life-changing bond with his niece.",
+                "rating": "7.6",
+                "language": "Turkish",
+                "genres": ["Drama"],
+                "release_date": "Fri, 22 Aug 2025 00:00:00 GMT"
+            },
+            {
+                "id": 2,
+                "title": "SAKAMOTO DAYS",
+                "type": "tv",
+                "thumbnail": "https://image.tmdb.org/t/p/original/wRpCqsJFyKNuh5FMegNPrhzp2NF.jpg",
+                "description": "Once the greatest hitman of all, Taro Sakamoto retired in the name of love. But when his past catches up, he must fight to protect his beloved family.",
+                "rating": "8.1",
+                "language": "Japanese",
+                "genres": ["Animation", "Comedy", "Action & Adventure"],
+                "release_date": "Sat, 11 Jan 2025 00:00:00 GMT"
+            },
+            {
+                "id": 3,
+                "title": "The Last Frontier",
+                "type": "movie",
+                "thumbnail": "https://image.tmdb.org/t/p/original/8InLk2qkQmBBvM3iLNaS6OSwR2p.jpg",
+                "description": "In a post-apocalyptic world, a group of survivors must journey across dangerous territories to find the last safe haven.",
+                "rating": "8.3",
+                "language": "English",
+                "genres": ["Action", "Sci-Fi", "Adventure"],
+                "release_date": "Fri, 15 Mar 2025 00:00:00 GMT"
+            },
+            {
+                "id": 4,
+                "title": "Eternal Love",
+                "type": "movie",
+                "thumbnail": "https://image.tmdb.org/t/p/original/5M5aX2OaXx2OaXx2OaXx2OaXx2O.jpg",
+                "description": "A timeless love story that spans decades and continents, following the lives of two star-crossed lovers.",
+                "rating": "7.9",
+                "language": "English",
+                "genres": ["Romance", "Drama"],
+                "release_date": "Fri, 20 Jun 2025 00:00:00 GMT"
+            },
+            {
+                "id": 5,
+                "title": "Shadow Games",
+                "type": "tv",
+                "thumbnail": "https://image.tmdb.org/t/p/original/6F9OZERbVCkCN73CxQXrXd0hwgF.jpg",
+                "description": "A psychological thriller following a detective who becomes obsessed with solving a series of mysterious disappearances.",
+                "rating": "8.5",
+                "language": "English",
+                "genres": ["Thriller", "Mystery", "Crime"],
+                "release_date": "Sat, 12 Apr 2025 00:00:00 GMT"
+            }
+        ];
+
+        // Add more sample data to reach 10 movies and 10 TV series
+        for (let i = 6; i <= 20; i++) {
+            sampleMediaData.push({
+                "id": i,
+                "title": `Sample ${i % 2 === 0 ? 'Movie' : 'TV Series'} ${i}`,
+                "type": i % 2 === 0 ? "movie" : "tv",
+                "thumbnail": `https://image.tmdb.org/t/p/original/${i}jrhldzLHXia0uieyqK8UJ8PNAG.jpg`,
+                "description": `This is a sample description for ${i % 2 === 0 ? 'movie' : 'TV series'} number ${i}.`,
+                "rating": (7 + Math.random() * 1.5).toFixed(1),
+                "language": i % 3 === 0 ? "English" : i % 3 === 1 ? "Turkish" : "Japanese",
+                "genres": i % 2 === 0 ? ["Action", "Adventure"] : ["Drama", "Romance"],
+                "release_date": new Date(2025, i % 12, (i % 28) + 1).toUTCString()
+            });
+        }
+
+        // Hero section rotation
+        let currentHeroIndex = 0;
+        const heroElements = sampleMediaData.filter(item => item.type === 'movie').slice(0, 5);
+        
+        function updateHeroSection() {
+            const hero = heroElements[currentHeroIndex];
+            document.getElementById('hero-title').textContent = hero.title;
+            document.getElementById('hero-description').textContent = hero.description;
+            document.getElementById('hero-button').setAttribute('href', `details.html?id=${hero.id}`);
+            document.getElementById('hero-section').style.backgroundImage = `linear-gradient(rgba(0, 0, 0, 0.7), rgba(0, 0, 0, 0.7)), url('${hero.thumbnail}')`;
+            
+            // Update active indicator
+            document.querySelectorAll('.indicator').forEach((indicator, index) => {
+                indicator.classList.toggle('active', index === currentHeroIndex);
+            });
+            
+            currentHeroIndex = (currentHeroIndex + 1) % heroElements.length;
+        }
+        
+        // Create indicators for hero section
+        const indicatorsContainer = document.getElementById('hero-indicators');
+        heroElements.forEach((_, index) => {
+            const indicator = document.createElement('div');
+            indicator.className = `indicator ${index === 0 ? 'active' : ''}`;
+            indicator.addEventListener('click', () => {
+                currentHeroIndex = index;
+                updateHeroSection();
+            });
+            indicatorsContainer.appendChild(indicator);
+        });
+        
+        // Initialize hero rotation
+        setInterval(updateHeroSection, 5000);
+        
         // Fetch media data from API
         async function fetchMedia() {
             try {
-                const response = await fetch('https://databaseuiy.vercel.app/api/media');
-                const mediaData = await response.json();
+                // In a real implementation, you would fetch from your API
+                // const response = await fetch('https://databaseuisk-three.vercel.app/api/media');
+                // const mediaData = await response.json();
+                
+                // For demo purposes, we'll use the sample data
+                const mediaData = sampleMediaData;
                 
                 // Filter and display latest movies
                 const movies = mediaData.filter(item => item.type === 'movie');
-                const latestMovies = movies.slice(0, 6); // Get first 6 movies
+                const latestMovies = movies.slice(0, 10); // Get first 10 movies
                 
                 const moviesContainer = document.getElementById('latest-movies');
                 moviesContainer.innerHTML = '';
@@ -434,13 +716,22 @@
                             <a href="details.html?id=${movie.id}">
                                 <div class="media-thumb">
                                     <img src="${movie.thumbnail}" alt="${movie.title}">
+                                    <div class="media-rating">
+                                        <i class="fas fa-star"></i> ${movie.rating}
+                                    </div>
                                 </div>
                                 <div class="media-info">
                                     <h3 class="media-title">${movie.title}</h3>
                                     <div class="media-meta">
-                                        <span>${movie.rating}/10</span>
                                         <span>${movie.language}</span>
+                                        <span class="media-type">Movie</span>
                                     </div>
+                                </div>
+                                <div class="media-hover-info">
+                                    <div class="media-genres">
+                                        ${movie.genres.map(genre => `<span class="genre-tag">${genre}</span>`).join('')}
+                                    </div>
+                                    <p>${movie.description.substring(0, 100)}...</p>
                                 </div>
                             </a>
                         </div>
@@ -450,7 +741,7 @@
                 
                 // Filter and display latest TV series
                 const tvSeries = mediaData.filter(item => item.type === 'tv');
-                const latestTV = tvSeries.slice(0, 6); // Get first 6 TV series
+                const latestTV = tvSeries.slice(0, 10); // Get first 10 TV series
                 
                 const tvContainer = document.getElementById('latest-tv');
                 tvContainer.innerHTML = '';
@@ -461,13 +752,22 @@
                             <a href="details.html?id=${tv.id}">
                                 <div class="media-thumb">
                                     <img src="${tv.thumbnail}" alt="${tv.title}">
+                                    <div class="media-rating">
+                                        <i class="fas fa-star"></i> ${tv.rating}
+                                    </div>
                                 </div>
                                 <div class="media-info">
                                     <h3 class="media-title">${tv.title}</h3>
                                     <div class="media-meta">
-                                        <span>${tv.rating}/10</span>
                                         <span>${tv.language}</span>
+                                        <span class="media-type">TV Series</span>
                                     </div>
+                                </div>
+                                <div class="media-hover-info">
+                                    <div class="media-genres">
+                                        ${tv.genres.map(genre => `<span class="genre-tag">${genre}</span>`).join('')}
+                                    </div>
+                                    <p>${tv.description.substring(0, 100)}...</p>
                                 </div>
                             </a>
                         </div>
@@ -477,11 +777,31 @@
                 
             } catch (error) {
                 console.error('Error fetching media:', error);
+                
+                // Fallback to sample data if API fails
+                console.log('Using sample data instead');
             }
         }
         
+        // Search functionality
+        document.getElementById('search-input').addEventListener('keyup', function(e) {
+            if (e.key === 'Enter') {
+                const query = this.value.trim();
+                if (query) {
+                    window.location.href = `search.html?q=${encodeURIComponent(query)}`;
+                }
+            }
+        });
+        
         // Call the function when page loads
-        document.addEventListener('DOMContentLoaded', fetchMedia);
+        document.addEventListener('DOMContentLoaded', function() {
+            fetchMedia();
+            
+            // Initialize hero section with first movie
+            if (heroElements.length > 0) {
+                updateHeroSection();
+            }
+        });
     </script>
 </body>
 </html>
