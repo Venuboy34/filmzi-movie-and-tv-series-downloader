@@ -67,6 +67,7 @@
         .logo {
             display: flex;
             align-items: center;
+            cursor: pointer;
         }
         
         .logo img {
@@ -203,6 +204,8 @@
             border-radius: 4px;
             font-weight: 600;
             transition: all 0.3s;
+            cursor: pointer;
+            border: none;
         }
         
         .btn:hover {
@@ -335,6 +338,9 @@
             text-align: center;
             flex: 1;
             transition: all 0.3s;
+            cursor: pointer;
+            border: none;
+            color: var(--text-white);
         }
         
         .episode-btn:hover {
@@ -410,6 +416,7 @@
             border-radius: 4px;
             font-weight: 600;
             transition: background-color 0.3s;
+            display: block;
         }
         
         .download-btn:hover {
@@ -623,7 +630,7 @@
     <!-- Header -->
     <header>
         <div class="container header-content">
-            <div class="logo">
+            <div class="logo" onclick="goToHome()">
                 <img src="https://ar-hosting.pages.dev/1756681512254.jpg" alt="Filmzi Logo">
                 <h1>FILMZI</h1>
             </div>
@@ -663,7 +670,7 @@
         <div class="error-message hidden" id="error-message">
             <h2>Unable to load media details</h2>
             <p>Please check your internet connection and try again.</p>
-            <a href="index.html" class="btn" style="margin-top: 20px;">Return to Home</a>
+            <button class="btn" style="margin-top: 20px;" onclick="goToHome()">Return to Home</button>
         </div>
         
         <!-- Media Details -->
@@ -693,19 +700,19 @@
             <div class="footer-section">
                 <h3>Genres</h3>
                 <ul>
-                    <li><a href="#">Action</a></li>
-                    <li><a href="#">Comedy</a></li>
-                    <li><a href="#">Drama</a></li>
-                    <li><a href="#">Horror</a></li>
+                    <li><a href="movie.html?genre=action">Action</a></li>
+                    <li><a href="movie.html?genre=comedy">Comedy</a></li>
+                    <li><a href="movie.html?genre=drama">Drama</a></li>
+                    <li><a href="movie.html?genre=horror">Horror</a></li>
                 </ul>
             </div>
             
             <div class="footer-section">
                 <h3>Support</h3>
                 <ul>
-                    <li><a href="#">Help Center</a></li>
-                    <li><a href="#">Contact Us</a></li>
-                    <li><a href="#">FAQ</a></li>
+                    <li><a href="help.html">Help Center</a></li>
+                    <li><a href="contact.html">Contact Us</a></li>
+                    <li><a href="faq.html">FAQ</a></li>
                 </ul>
             </div>
         </div>
@@ -720,6 +727,19 @@
         document.getElementById('menu-toggle').addEventListener('click', function() {
             document.getElementById('nav-menu').classList.toggle('show');
         });
+
+        // Navigation functions
+        function goToHome() {
+            window.location.href = 'index.html';
+        }
+        
+        function goToWatch(mediaId, season, episode) {
+            if (season && episode) {
+                window.location.href = `watch.html?id=${mediaId}&season=${season}&episode=${episode}`;
+            } else {
+                window.location.href = `watch.html?id=${mediaId}`;
+            }
+        }
 
         // Get media ID from URL parameters
         const urlParams = new URLSearchParams(window.location.search);
@@ -790,27 +810,26 @@
                     // For TV series, show season selector
                     mediaHtml += `
                         <div class="action-buttons">
-                            <a href="#seasons" class="btn">
+                            <button class="btn" onclick="document.getElementById('seasons').scrollIntoView({behavior: 'smooth'})">
                                 <i class="fas fa-play"></i> Browse Seasons
-                            </a>
-                            <a href="#download" class="btn btn-outline">
+                            </button>
+                            <button class="btn btn-outline" onclick="document.getElementById('download').scrollIntoView({behavior: 'smooth'})">
                                 <i class="fas fa-download"></i> Download
-                            </a>
+                            </button>
                         </div>
                     `;
                 } else {
                     // For movies
-                    const watchUrl = mediaData.video_links && mediaData.video_links.video_1080p ? 
-                        `watch.html?id=${mediaData.id}` : '#';
+                    const hasVideo = mediaData.video_links && (mediaData.video_links.video_1080p || mediaData.video_links.video_720p);
                     
                     mediaHtml += `
                         <div class="action-buttons">
-                            <a href="${watchUrl}" class="btn" ${!mediaData.video_links ? 'onclick="event.preventDefault(); alert(\'No video available for this media\')"' : ''}>
-                                <i class="fas fa-play"></i> Watch Now
-                            </a>
-                            <a href="#download" class="btn btn-outline">
+                            <button class="btn" onclick="goToWatch(${mediaData.id})" ${!hasVideo ? 'disabled style="opacity: 0.6; cursor: not-allowed;"' : ''}>
+                                <i class="fas fa-play"></i> ${hasVideo ? 'Watch Now' : 'No Video Available'}
+                            </button>
+                            <button class="btn btn-outline" onclick="document.getElementById('download').scrollIntoView({behavior: 'smooth'})">
                                 <i class="fas fa-download"></i> Download
-                            </a>
+                            </button>
                             ${mediaData.download_links && mediaData.download_links.download_2160p ? `
                                 <a href="${mediaData.download_links.download_2160p.url}" class="btn btn-4k" target="_blank">
                                     <i class="fas fa-download"></i> Download 4K
@@ -939,8 +958,7 @@
             let episodesHtml = `<div class="episodes-grid">`;
             
             seasonData.episodes.forEach(episode => {
-                const watchUrl = episode.video_720p ? 
-                    `watch.html?id=${mediaId}&type=tv&season=${seasonData.season_number}&episode=${episode.episode_number}` : '#';
+                const hasVideo = episode.video_720p;
                 
                 episodesHtml += `
                     <div class="episode-card">
@@ -949,9 +967,9 @@
                         </div>
                         <div class="episode-title">${episode.episode_name || `Episode ${episode.episode_number}`}</div>
                         <div class="episode-actions">
-                            <a href="${watchUrl}" class="episode-btn" ${!episode.video_720p ? 'onclick="event.preventDefault(); alert(\'No video available for this episode\')"' : ''}>
-                                <i class="fas fa-play"></i> Watch
-                            </a>
+                            <button class="episode-btn" onclick="goToWatch(${mediaId}, ${seasonData.season_number}, ${episode.episode_number})" ${!hasVideo ? 'disabled style="opacity: 0.6; cursor: not-allowed;"' : ''}>
+                                <i class="fas fa-play"></i> ${hasVideo ? 'Watch' : 'Not Available'}
+                            </button>
                             ${episode.download_720p ? `
                                 <a href="${episode.download_720p.url}" class="episode-btn outline" target="_blank">
                                     <i class="fas fa-download"></i> Download
